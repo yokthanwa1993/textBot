@@ -1,0 +1,61 @@
+# Google Cloud Credentials
+google-credentials.json
+
+# Node modules
+node_modules/
+npm-debug.log*
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.production
+
+# Test images
+test-images/
+*.jpg
+*.png
+*.pdf
+
+# Logs
+logs/
+*.log
+
+# Build outputs
+dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Temporary files
+*_temp.*
+backup.*
+
+# Docker deployment files (keep separate for each service)
+.dockerignore
+captain-definition
+docker-compose.yml
+Dockerfile.*
+deploy*.sh
+ecosystem.docker.js
+
+# VS Code settings (keep project settings but ignore user settings)
+.vscode/settings.json
+.vscode/launch.json
+
+# PM2 runtime files
+pm2.json
+.pm2/
+
+# Archive files
+*.tar.gz
+*.zip
+
+# SpecStory AI files (optional - uncomment if you want to exclude)
+# .specstory/

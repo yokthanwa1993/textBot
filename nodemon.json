@@ -1,0 +1,20 @@
+{
+  "watch": [
+    "backend/",
+    "src/"
+  ],
+  "ext": "js,json,mjs",
+  "ignore": [
+    "node_modules/", 
+    "logs/", 
+    "*.log",
+    "frontend/",
+    "liff-vite/"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "delay": "1000",
+  "restartable": "rs",
+  "verbose": true
+} 

@@ -1,0 +1,160 @@
+
+## PROJECT OVERVIEW
+TEXTBot is a LINE Bot with text processing and OCR capabilities, using Flex Messages for a rich UI and LIFF integration for editing.
+
+## TABLE OF CONTENTS
+1.  TECH STACK
+2.  PROJECT STRUCTURE
+3.  CODING STANDARDS
+4.  UI/UX GUIDELINES
+5.  WORKFLOW & RELEASE RULES
+6.  DEBUGGING
+7.  LINE API USAGE
+8.  OCR INTEGRATION
+9.  SPECSTORY CONFIGURATION
+10. FLEX MESSAGE TEMPLATES
+
+## TECH STACK
+*   Node.js
+*   GraphQL
+*   Express
+*   LINE Bot SDK
+*   LIFF (LINE Frontend Framework)
+*   PM2 (Process Manager)
+*   Nodemon (Automatic Restart)
+*   OCR API (`https://ocr.wwoom.com/api`)
+*   SpecStory VS Code Extension
+*   Gemini 2.5 Pro Model from Google
+*   o4-mini model from OpenAI
+*   Claude 3.5 Sonnet model from Anthropic
+
+## PROJECT STRUCTURE
+*   `backend/`: Backend code (Node.js, GraphQL)
+    *   `line/`: LINE Bot related code
+        *   `utils/flexMessages.js`: Flex Message templates
+    *   `resolvers/`: GraphQL resolvers
+    *   `schema/`: GraphQL schema definitions
+    *   `index.js`: Main application file
+*   `frontend/`: Frontend code (LIFF Apps)
+    *   `main.js`: LIFF app for editing messages
+    *   `sent.html`: LIFF app for testing Flex Messages
+*   `.specstory/`: SpecStory files (AI chat history, rules)
+*   `ai_rules_backups/`: Backup folder for AI rules
+*   `copilot-instructions.md`: AI coding assistant rules file
+*   `.project.json`: Project identity file
+*   `.gitignore`: Version control settings
+*   `logs/error.log`: Error logs
+
+## CODING STANDARDS
+*   Use ES6 modules (`import`/`export`).
+*   Follow a consistent code style (e.g., use Prettier).
+*   Write clear and concise code.
+*   Use meaningful variable and function names.
+*   Handle errors gracefully.
+
+## UI/UX GUIDELINES
+*   Use Flex Messages for a rich and engaging user experience.
+*   Maintain a consistent UI across all message types (TEXT, EDIT, OCR).
+*   Use appropriate colors and spacing to enhance readability.
+
+## WORKFLOW & RELEASE RULES
+*   Use PM2 for production process management.
+*   Use Nodemon for automatic restarts during development.
+*   Always test changes thoroughly before deploying to production.
+*   Restart backend server (PM2) after code changes.
+*   After code changes, the backend server (PM2) MUST be restarted to see the changes. Nodemon is used for automatic restarts during development.
+
+## DEBUGGING
+*   Check the server logs for errors.
+*   Use `console.log` statements for debugging purposes.
+*   Verify Flex Message structures using the LINE Flex Message Simulator.
+*   Test API endpoints with `curl`.
+*   Use real-time log monitoring.
+
+## LINE API USAGE
+*   Use the LINE Bot SDK for handling webhooks and sending messages.
+*   Store user messages using `lineService.addMessage()`.
+*   Send Flex Messages using `lineService.replyFlexMessage()`.
+*   Use LIFF SDK for frontend integration.
+*   Always include a LIFF access token in the Authorization header for API calls.
+*   Ensure that the LIFF production is updated.
+*   LIFF Access Token Lifetime is approximately 30-60 minutes. After expiration, either refresh the token or re-login.
+
+## OCR INTEGRATION
+*   Use the OCR API at `https://ocr.wwoom.com/api`.
+*   The OCR API supports both URL and Base64 image data.
+*   When sending image URLs, the OCR service must have a LINE Access Token to access the LINE Content API.
+*   The OCR API returns a JSON response in the format `{"text": "ผลลัพธ์ OCR"}`.
+*   Handle the OCR result and format it into a Flex Message.
+*   The OCR API `https://ocr.wwoom.com/api` supports both URL and Base64 formats:
+    *   URL:
+        ```json
+        {
+          "url": "https://iili.io/FNrnLOJ.png"
+        }
+        ```
+    *   Base64:
+        ```json
+        {
+          "base64": "data:image/png;base64,iVBORw0KGg..."
+        }
+        ```
+    *   Response Format:
+        ```json
+        {
+          "text": "ข้อความที่อ่านได้จากรูปภาพ"
+        }
+        ```
+    *   If using URL: the OCR service MUST have a LINE Access Token to access the LINE Content API.
+    *   If using Base64: authentication is not required, but the bandwidth usage will be higher.
+
+## SPECSTORY CONFIGURATION
+*   The project uses the SpecStory VS Code extension for automated conversation recording and AI rules management.
+*   `specstory.autoSave.enabled: true` - Enable automatic saving of conversations.
+*   `specstory.autoSave.interval: 30000` - Set the save interval to 30 seconds.
+*   `specstory.autoSave.onChatEnd: true` - Save the conversation when the chat ends.
+*   `specstory.derivedRules.enabled: true` - Enable automatic updating of AI rules.
+*   `specstory.derivedRules.backupOnChange: true` - Create a backup before changing AI rules.
+*   Project identity is stored in `.project.json`.
+*   AI chat history is stored in the `` folder.
+*   AI rules backups are stored in the `ai_rules_backups` folder.
+*   A `.gitignore` file manages version control settings.
+
+## FLEX MESSAGE TEMPLATES
+The project uses four main Flex Message templates:
+
+1.  **`createTextResultFlex()`**:
+    *   Header: Green (#27AE60), "TEXT", centered
+    *   Body:
+        *   Status: "📊 สำเร็จ ✅" (Green)
+        *   Label: "📋 ข้อความที่ได้รับ:"
+        *   Message: Displayed in a light gray box (#F5F5F5), centered, with rounded corners, and padding.
+        *   Time: Displays the timestamp in Thai format
+        *   A separator line is placed between the status and the message.
+    *   Footer:
+        *   EDIT button: Red (#E74C3C)
+        *   LIST button: Black (#000000), white text
+2.  **`createEditResultFlex()`**:
+    *   Header: Orange (#F39C12), "EDIT", centered
+    *   Body:
+        *   Status: "📊 แก้ไขสำเร็จ ✅" (Green)
+        *   Label: "📋 ข้อความที่ได้รับ:"
+        *   Message: Displayed in a light gray box (#F5F5F5), centered, with rounded corners, and padding.
+        *   Time: Displays the timestamp in Thai format
+        *   A separator line is placed between the status and the message.
+    *   Footer:
+        *   EDIT button: Red (#E74C3C)
+        *   LIST button: Black (#000000), white text
+3.  **`createOCRResultFlex()`**:
+    *   Header: Blue (#3498DB), "OCR", centered
+    *   Body:
+        *   Status: "📊 สำเร็จ ✅" (Green)
+        *   Label: "📋 ข้อความที่อ่านได้:"
+        *   Message: Displayed in a light gray box (#F5F5F5), centered, with rounded corners, and padding.
+        *   Time: Displays the timestamp in Thai format
+        *   A separator line is placed between the status and the message.
+    *   Footer:
+        *   EDIT button: Red (#E74C3C)
+        *   LIST button: Black (#000000), white text
+4.  **`createLiffMessageFlex()`**:
+    *   Alias for `createTextResultFlex()`

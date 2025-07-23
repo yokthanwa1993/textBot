@@ -1,0 +1,24 @@
+tunnel: f6e9e352-3e1e-42be-b752-6e6c1e94ed55
+credentials-file: /Users/yok/.cloudflared/f6e9e352-3e1e-42be-b752-6e6c1e94ed55.json
+
+ingress:
+  # LIFF App - Frontend dev server
+  - hostname: liff.wwoom.com
+    service: http://localhost:3000
+    originRequest:
+      noTLSVerify: true
+
+  # GraphQL API
+  - hostname: api.wwoom.com
+    service: http://localhost:4000
+    originRequest:
+      noTLSVerify: true
+
+  # OCR API Service
+  - hostname: ocr.wwoom.com
+    service: http://localhost:3001
+    originRequest:
+      noTLSVerify: true
+
+  # Catch-all rule
+  - service: http_status:404 
